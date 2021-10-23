@@ -9,6 +9,8 @@
 <script src="{{asset('js/jquery.min.js')}}"></script>
 <link href="https://api.mapbox.com/mapbox-gl-js/v2.5.1/mapbox-gl.css" rel="stylesheet">
 <script src="https://api.mapbox.com/mapbox-gl-js/v2.5.1/mapbox-gl.js"></script>
+<script src='https://api.mapbox.com/mapbox.js/v3.3.1/mapbox.js'></script>
+<link href='https://api.mapbox.com/mapbox.js/v3.3.1/mapbox.css' rel='stylesheet' />
   </head>
   <body>
     <!-- Load the `mapbox-gl-geocoder` plugin. -->
@@ -20,8 +22,7 @@
   <script src="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-directions/v4.1.0/mapbox-gl-directions.js"></script>
 <link rel="stylesheet" href="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-directions/v4.1.0/mapbox-gl-directions.css" type="text/css">
 <!-- link gi` do geocoder tim` vi tri -->
-<script src="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v4.7.2/mapbox-gl-geocoder.min.js"></script>
-<link rel="stylesheet" href="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v4.7.2/mapbox-gl-geocoder.css" type="text/css">
+
  
         @yield('content')
     </div>
@@ -44,10 +45,10 @@
         height: 40px;
         border-radius: 50%;
         cursor: pointer;
-
     }
     .mapboxgl-popup {
         max-width: 200px;
+        z-index: 99;
     }
     .mapboxgl-popup-content {
         text-align: center;
@@ -93,7 +94,45 @@
       bottom:0;
      
     }
+    .ui-select {
+      background:#fff;
+      position:absolute;
+      bottom:0px;
+      left:50%;
+      z-index:100;
+      padding:15px;
+      border-radius:3px;
+    }
 </style>
 
 @yield('script')
+<script>
+
+//để chỉ đường và tìm kiếm thì xóa "Marker for map" bên dưới
+
+//Marker for map
+    var test ='<?php echo $dataArray;?>';
+    var dataMap = JSON.parse = JSON.parse(test);
+
+    dataMap.features.forEach(function(marker) {
+            
+    //tạo thẻ div có class là marker, để hồi chỉnh css cho marker
+        var el = document.createElement('div');
+        el.className = 'marker';
+
+    //gắn marker đó tại vị trí tọa độ
+        new mapboxgl.Marker(el).setLngLat(marker.geometry.coordinates)
+            .setLngLat(marker.geometry.coordinates)
+            .setPopup(
+                new mapboxgl.Popup({ offset: 25 }) // add popups
+                    .setHTML(
+                        `<h3>${marker.properties.name}</h3><p>${marker.properties.address}</p>`
+                        // '<h3>' + marker.properties.name + '</h3><p>' + marker.properties.address + '</p><p>' + marker.properties.phone + '</p>'
+                    )
+                ) 
+            
+            .addTo(map);
+        });
+//
+</script>
 </html>

@@ -23,7 +23,7 @@ class MapController extends Controller
             $features['properties']= $properties;
             array_push($dataMap['features'],$features);
        }
-        return view('googlemap.index')->with('dataArray',json_encode($dataMap),'Welcome to Our Map');
+        return view('googlemap.index')->with('dataArray',json_encode($dataMap));
         //return view('googlemap.index');
     }
     public function view(){
